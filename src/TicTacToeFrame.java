@@ -35,16 +35,24 @@ public class TicTacToeFrame extends JFrame {
             moveCnt++;
 
             if (moveCnt >= MOVES_FOR_WIN && isWin(currentPlayer)) {
-                JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " wins!");
-                resetGame();
+                int response = JOptionPane.showConfirmDialog(null, "Player " + currentPlayer + " wins! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    resetGame();
+                } else {
+                    System.exit(0);
+                }
             } else if (moveCnt >= MOVES_FOR_TIE && isTie()) {
-                JOptionPane.showMessageDialog(null, "It's a Tie!");
-                resetGame();
+                int response = JOptionPane.showConfirmDialog(null, "It's a Tie! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    resetGame();
+                } else {
+                    System.exit(0);
+                }
             } else {
                 switchPlayer();
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Illegal Move");
+            JOptionPane.showMessageDialog(null, "Illegal Move - Please try again.");
         }
     }
 
@@ -114,14 +122,96 @@ public class TicTacToeFrame extends JFrame {
         return false;
     }
 
-    public static boolean isTie() {
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                if (board[row][col].getText().equals(" ")) {
-                    return false;
-                }
+    private static boolean isTie()
+    {
+        boolean xFlag = false;
+        boolean oFlag = false;
+        // Check all 8 win vectors for an X and O so 
+        // no win is possible
+        // Check for row ties
+        for(int row=0; row < 3; row++)
+        {
+            if(board[row][0].equals("X") || 
+               board[row][1].equals("X") ||
+               board[row][2].equals("X"))
+            {
+                xFlag = true; // there is an X in this row
             }
+            if(board[row][0].equals("O") || 
+               board[row][1].equals("O") ||
+               board[row][2].equals("O"))
+            {
+                oFlag = true; // there is an O in this row
+            }
+            
+            if(! (xFlag && oFlag) )
+            {
+                return false; // No tie can still have a row win
+            }
+            
+            xFlag = oFlag = false;
+            
         }
+        // Now scan the columns
+        for(int col=0; col < 3; col++)
+        {
+            if(board[0][col].equals("X") || 
+               board[1][col].equals("X") ||
+               board[2][col].equals("X"))
+            {
+                xFlag = true; // there is an X in this col
+            }
+            if(board[0][col].equals("O") || 
+               board[1][col].equals("O") ||
+               board[2][col].equals("O"))
+            {
+                oFlag = true; // there is an O in this col
+            }
+            
+            if(! (xFlag && oFlag) )
+            {
+                return false; // No tie can still have a col win
+            }
+        }    
+        // Now check for the diagonals
+        xFlag = oFlag = false;
+        
+        if(board[0][0].equals("X") ||
+           board[1][1].equals("X") ||    
+           board[2][2].equals("X") )
+        {
+            xFlag = true;
+        } 
+        if(board[0][0].equals("O") ||
+           board[1][1].equals("O") ||    
+           board[2][2].equals("O") )
+        {
+            oFlag = true;
+        } 
+        if(! (xFlag && oFlag) )
+        {
+            return false; // No tie can still have a diag win
+        }        
+        xFlag = oFlag = false;        
+        
+        if(board[0][2].equals("X") ||
+           board[1][1].equals("X") ||    
+           board[2][0].equals("X") )
+        {
+            xFlag =  true;
+        }
+        if(board[0][2].equals("O") ||
+           board[1][1].equals("O") ||    
+           board[2][0].equals("O") )
+        {
+            oFlag =  true;
+        }
+        if(! (xFlag && oFlag) )
+        {
+            return false; // No tie can still have a diag win
+        }        
+
+        // Checked every vector so I know I have a tie
         return true;
     }
 }
