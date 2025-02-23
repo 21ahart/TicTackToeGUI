@@ -33,27 +33,21 @@ public class TicTacToeFrame extends JFrame {
         if (board[row][col].getText().equals(" ")) {
             board[row][col].setText(currentPlayer);
             moveCnt++;
+            int playerNumber = currentPlayer.equals("X") ? 1 : 2;
+            if (currentPlayer.equals("X")) {
+                board[row][col].setForeground(java.awt.Color.RED);
+            } else {
+                board[row][col].setForeground(java.awt.Color.BLUE);
+            }
 
             if (moveCnt >= MOVES_FOR_WIN && isWin(currentPlayer)) {
-                int response = JOptionPane.showConfirmDialog(null, "Player " + currentPlayer + " wins! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    resetGame();
-                } else {
-                    System.exit(0);
-                }
-                int response = JOptionPane.showConfirmDialog(null, "Player " + currentPlayer + " wins! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
+                int response = JOptionPane.showConfirmDialog(null, "Player " + playerNumber + " wins! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
                     resetGame();
                 } else {
                     System.exit(0);
                 }
             } else if (moveCnt >= MOVES_FOR_TIE && isTie()) {
-                int response = JOptionPane.showConfirmDialog(null, "It's a Tie! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    resetGame();
-                } else {
-                    System.exit(0);
-                }
                 int response = JOptionPane.showConfirmDialog(null, "It's a Tie! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
                     resetGame();
