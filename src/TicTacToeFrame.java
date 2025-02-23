@@ -35,11 +35,19 @@ public class TicTacToeFrame extends JFrame {
             moveCnt++;
 
             if (moveCnt >= MOVES_FOR_WIN && isWin(currentPlayer)) {
-                JOptionPane.showMessageDialog(null, "Player " + currentPlayer + " wins!");
-                resetGame();
+                int response = JOptionPane.showConfirmDialog(null, "Player " + currentPlayer + " wins! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    resetGame();
+                } else {
+                    System.exit(0);
+                }
             } else if (moveCnt >= MOVES_FOR_TIE && isTie()) {
-                JOptionPane.showMessageDialog(null, "It's a Tie!");
-                resetGame();
+                int response = JOptionPane.showConfirmDialog(null, "It's a Tie! Would you like to play again?", "Game Over", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    resetGame();
+                } else {
+                    System.exit(0);
+                }
             } else {
                 switchPlayer();
             }
@@ -114,14 +122,71 @@ public class TicTacToeFrame extends JFrame {
         return false;
     }
 
-    public static boolean isTie() {
+    private static boolean isTie() {
+        boolean xFlag = false;
+        boolean oFlag = false;
+    
+        // Check all rows for ties
         for (int row = 0; row < 3; row++) {
+            xFlag = oFlag = false;
             for (int col = 0; col < 3; col++) {
-                if (board[row][col].getText().equals(" ")) {
-                    return false;
+                if (board[row][col].getText().equals("X")) {
+                    xFlag = true;
+                }
+                if (board[row][col].getText().equals("O")) {
+                    oFlag = true;
                 }
             }
+            if (!(xFlag && oFlag)) {
+                return false; // No tie if any row does not contain both X and O
+            }
         }
+    
+        // Check all columns for ties
+        for (int col = 0; col < 3; col++) {
+            xFlag = oFlag = false;
+            for (int row = 0; row < 3; row++) {
+                if (board[row][col].getText().equals("X")) {
+                    xFlag = true;
+                }
+                if (board[row][col].getText().equals("O")) {
+                    oFlag = true;
+                }
+            }
+            if (!(xFlag && oFlag)) {
+                return false; // No tie if any column does not contain both X and O
+            }
+        }
+    
+        // Check main diagonal for ties
+        xFlag = oFlag = false;
+        for (int i = 0; i < 3; i++) {
+            if (board[i][i].getText().equals("X")) {
+                xFlag = true;
+            }
+            if (board[i][i].getText().equals("O")) {
+                oFlag = true;
+            }
+        }
+        if (!(xFlag && oFlag)) {
+            return false; // No tie if main diagonal does not contain both X and O
+        }
+    
+        // Check anti-diagonal for ties
+        xFlag = oFlag = false;
+        for (int i = 0; i < 3; i++) {
+            if (board[i][2 - i].getText().equals("X")) {
+                xFlag = true;
+            }
+            if (board[i][2 - i].getText().equals("O")) {
+                oFlag = true;
+            }
+        }
+        if (!(xFlag && oFlag)) {
+            return false; // No tie if anti-diagonal does not contain both X and O
+        }
+    
+        // If all rows, columns, and diagonals contain both X and O, it's a tie
         return true;
     }
 }
